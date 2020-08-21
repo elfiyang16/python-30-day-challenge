@@ -50,8 +50,12 @@ def parse_and_extract(url, name="2020"):
     for row in rows[1:]:
         cols = row.find("td")
         row_data = []
+        # row_dict_data = {}
         # iterable
         for i, col in enumerate(cols):
+            header_name = header_names[i]
+            # %,Foreign,% problem with the header thou
+            # row_dict_data[header_name]= col.text
             row_data.append(col.text)
         table_data.append(row_data)
     # print(header_names)
