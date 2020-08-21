@@ -12,6 +12,7 @@ def url_to_txt(url, filename="word.html", save=False):
     r = requests.get(url)
     if r.status_code == 200:
         html_text = r.text
+        # save html to a file
         if save:
             with open(f"word-{year}.html", "w") as f:
                 f.write(html_text)
@@ -20,16 +21,32 @@ def url_to_txt(url, filename="word.html", save=False):
 
 
 html_text = url_to_txt(url)
+# save html to variable
 r_html = HTML(html=html_text)
 table_class = ".imdb-scroll-table"
 # like jquery in a way
 r_table = r_html.find(table_class)
 
-# print(r_table)
+# if we find such element
 if len(r_table) == 1:
-    print(r_table[0].text)
+    # select the first element
     parsed_table = r_table[0]
+    # get all the trs
     rows = parsed_table.find("tr")
-    header = rows[0]
+    # the first row is the header
+    header_row = rows[0]
+    header_cols = header_row.find("th")
+    # iterate through header th to find the column names
+    header_names = [x.text for x in header_cols]
+    # a holder for tables
+    table_data = []
+    # get all data from each row
     for row in rows[1:]:
-        print(row.text)
+        cols = row.find("td")
+        row_data = []
+        # iterable
+        for i, col in enumerate(cols):
+            row_data.append(col.text)
+        table_data.append(row_data)
+    print(header_names)
+    print(table_data)
