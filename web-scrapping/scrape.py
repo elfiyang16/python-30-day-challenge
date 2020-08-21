@@ -3,13 +3,9 @@ import datetime
 from requests_html import HTML
 import pandas as pd
 import os
+import sys
 
 BASE_DIR = os.path.dirname(__file__)
-
-now = datetime.datetime.now()
-year = now.year
-
-url = "https://www.boxofficemojo.com/year/world/"
 
 
 def url_to_txt(url, filename="word.html", save=False):
@@ -66,4 +62,33 @@ def parse_and_extract(url, name="2020"):
     df.to_csv(filepath, index=False)
 
 
-parse_and_extract(url, name="2019")
+def run(start_year=None, years_ago=10):
+    if start_year == None:
+        now = datetime.datetime.now()
+        start_year = now.year
+    # assertation
+    assert isinstance(start_year, int)
+    assert isinstance(years_ago, int)
+    assert len(f"{start_year}") == 4
+    #  interate through start to ago years and scrape through
+    for i in range(0, years_ago+1):
+        url = f"https://www.boxofficemojo.com/year/world/{start_year}/"
+        parse_and_extract(url, name=start_year)
+        print(f"Finished{start_year}")
+        start_year -= 1
+
+
+if __name__ == "__main__":
+    #  pass in sys arg as input :
+    # python3 -i scrape.py 2015 5
+    start, count = sys.argv[1], sys.argv[2]
+    #  if input is mal formated then pass in default input
+    try:
+        start = int(start)
+    except:
+        start = None
+    try:
+        count = int(count)
+    except:
+        count = 1
+    run(start_year=start, years_ago=count)
