@@ -62,7 +62,7 @@ def parse_and_extract(url, name="2020"):
     df.to_csv(filepath, index=False)
 
 
-def run(start_year=None, years_ago=10):
+def run(start_year=None, years_ago=1):
     if start_year == None:
         now = datetime.datetime.now()
         start_year = now.year
@@ -84,11 +84,11 @@ if __name__ == "__main__":
     start, count = sys.argv[1], sys.argv[2]
     #  if input is mal formated then pass in default input
     try:
-        start = int(start)
+        start = int(sys.argv[1])
     except:
         start = None
     try:
-        count = int(count)
+        count = int(sys.argv[2])
     except:
         count = 1
     run(start_year=start, years_ago=count)
