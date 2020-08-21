@@ -2,6 +2,9 @@ import requests
 import datetime
 from requests_html import HTML
 import pandas as pd
+import os
+
+BASE_DIR = os.path.dirname(__file__)
 
 now = datetime.datetime.now()
 year = now.year
@@ -54,5 +57,13 @@ def parse_and_extract(url, name="2020"):
         # print(table_data)
     # ['Rank', 'Release Group', 'Worldwide', 'Domestic', '%', 'Foreign', '%']
     # [['1', 'Bad Boys for Life', '$424,617,855', '$204,417,855', '48.1%', '$220,200,000', '51.9%'],
+    # get it store in file dynamically
+    path = os.path.join(BASE_DIR, "data")
+    os.makedirs(path, exist_ok=True)
+    filepath = os.path.join("data", f"{name}.csv")
+
     df = pd.DataFrame(table_data, columns=header_names)
-    df.to_csv(f"data/{name}.csv", index=False)
+    df.to_csv(filepath, index=False)
+
+
+parse_and_extract(url, name="2019")
