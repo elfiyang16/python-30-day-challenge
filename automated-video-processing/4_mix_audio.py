@@ -17,3 +17,24 @@ clip = VideoFileClip(source_path)
 
 original_audio = clip.audio
 original_audio.write_audiofile(og_audio_path)
+
+
+background_audio_clip = AudioFileClip(source_audio_path)
+bg_music = background_audio_clip.subclip(0, clip.duration)
+
+# change the volume
+# bg_music = bg_music.fx(volumex, 0.10)
+bg_music = bg_music.volumex(0.10)
+# RUN:
+# bg_music.write_audiofile()
+
+final_audio = CompositeAudioClip([original_audio, bg_music])
+final_audio.write_audiofile(final_audio_path, fps=original_audio.fps)
+
+
+# new_audio = AudioFileClip(final_audio_path)
+# final_clip = clip.set_audio(new_audio)
+
+final_clip = clip.set_audio(final_audio)
+final_clip.write_videofile(
+    final_video_path, codec='libx264', audio_codec="aac")
