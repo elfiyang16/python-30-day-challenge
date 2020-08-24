@@ -18,4 +18,13 @@ fps = clip.reader.fps
 subclip = clip.subclip(10, 20)  # the timeperiod we want the clip
 subclip = subclip.resize(width=320)
 # RUN:
+# ffmpeg more efficient than moviepy
 subclip.write_gif(output_path1, fps=fps, program='ffmpeg')
+
+
+w, h = clip.size
+subclip2 = clip.subclip(10, 20)
+square_cropped_clip = crop(
+    subclip2, width=320, height=320, x_center=w/2, y_center=h/2)
+# RUN:
+# square_cropped_clip.write_gif(output_path2, fps=fps, program='ffmpeg')
