@@ -7,7 +7,10 @@ import os
 source_path = os.path.join(SAMPLE_INPUTS, "sample.mp4")
 thumbnail_dir = os.path.join(SAMPLE_INPUTS, "thumbnails")
 # make a dir to store the images we got
+thumbnail_per_frame_dir = os.path.join(SAMPLE_INPUTS, "thumbnails-per-frame")
+
 os.makedirs(thumbnail_dir, exist_ok=True)
+os.makedirs(thumbnail_per_frame_dir, exist_ok=True)
 
 clip = VideoFileClip(source_path)
 
@@ -20,12 +23,15 @@ max_duration = int(duration) + 1
 # convert to a int
 for i in range(0, max_duration):
     print(f"frame at {i} seconds")
-    frame = clip.get_frame(int(i))
-    # print(frame)  # np.array
-    new_img_filepath = os.path.join(thumbnail_dir, f"{i}.jpg")
-    # save image per frame as jpg using Image lib
-    new_image = Image.fromarray(frame)
-    new_image.save(new_img_filepath)
+    #  turn the frames into a enumerate
+    for i, frame in enumerate(clip.iter_frames()):
+        # frame = clip.get_frame(int(i))
+        # print(frame)  # np.array
+        # new_img_filepath = os.path.join(thumbnail_dir, f"{i}.jpg")
+        new_img_filepath = os.path.join(thumbnail_per_frame_dir, f"{i}.jpg")
+        # save image per frame as jpg using Image lib
+        new_image = Image.fromarray(frame)
+        new_image.save(new_img_filepath)
 
 """
  [[172 116  77]
